@@ -174,7 +174,7 @@ def findPlane(name):
     return createArray(connection, query)
 
 
-@app.route('/delete')
+@app.route('/delete', methods=['DELETE'])
 def deletePlane():
     name = request.args.get('name')
     if len(findPlane(name)) == 0:
