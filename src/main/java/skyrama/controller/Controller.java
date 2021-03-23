@@ -21,9 +21,14 @@ public class Controller {
     public ResponseEntity<String> insertPlane(@RequestBody String data){
         Gson gson = new Gson();
         Plane plane = gson.fromJson(data, Plane.class);
+        String type = plane.getType();
         if (plane.getName() == null || plane.getName().equals(""))
             return badRequest.body(new Gson().toJson("Wrong name"));
-        if (plane.getType() == null || plane.getType().equals(""))
+        if (type == null || type.equals(""))
+            return badRequest.body(new Gson().toJson("Wrong type"));
+        if (!(type.equalsIgnoreCase("small")) && !(type.equalsIgnoreCase("medium")) &&
+                !(type.equalsIgnoreCase("large")) && !(type.equalsIgnoreCase("searama")) &&
+                !(type.equalsIgnoreCase("helicopter")))
             return badRequest.body(new Gson().toJson("Wrong type"));
         if (!data.contains("cargo"))
             return badRequest.body(new Gson().toJson("Wrong cargo"));
@@ -37,7 +42,8 @@ public class Controller {
             return badRequest.body(new Gson().toJson("Wrong experience"));
         if (!data.contains("mastery"))
             return badRequest.body(new Gson().toJson("Wrong mastery"));
-        dat.insertPlane(plane);
+        if (!dat.insertPlane(plane))
+            return badRequest.body(new Gson().toJson("Error"));
         return ok.body(new Gson().toJson("Plane added"));
     }
 
