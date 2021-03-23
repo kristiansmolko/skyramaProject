@@ -4,6 +4,9 @@ public class Util {
 
     public int getFlightTime(String time){
         String[] temp = time.split(":");
+        if (Integer.parseInt(temp[0]) > 24 || Integer.parseInt(temp[1]) > 60 || Integer.parseInt(temp[0]) < 0 ||
+                Integer.parseInt(temp[1]) < 0)
+            return 0;
         int hours = Integer.parseInt(temp[0]) * 3600;
         int mins = Integer.parseInt(temp[1]) * 60;
         return hours + mins;
