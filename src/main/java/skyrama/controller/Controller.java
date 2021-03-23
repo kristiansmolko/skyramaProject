@@ -21,11 +21,12 @@ public class Controller {
     public ResponseEntity<String> insertPlane(@RequestBody String data){
         Gson gson = new Gson();
         Plane plane = gson.fromJson(data, Plane.class);
-        System.out.println(plane.isCargo());
         if (plane.getName() == null || plane.getName().equals(""))
             return badRequest.body(new Gson().toJson("Wrong name"));
         if (plane.getType() == null || plane.getType().equals(""))
             return badRequest.body(new Gson().toJson("Wrong type"));
+        if (!data.contains("cargo"))
+            return badRequest.body(new Gson().toJson("Wrong cargo"));
         if (plane.getCost() <= 0)
             return badRequest.body(new Gson().toJson("Wrong cost of departure"));
         if (plane.getFlight() == null || plane.getFlight().equals(""))
@@ -34,6 +35,8 @@ public class Controller {
             return badRequest.body(new Gson().toJson("Wrong delivery"));
         if (plane.getExp() <= 0)
             return badRequest.body(new Gson().toJson("Wrong experience"));
+        if (!data.contains("mastery"))
+            return badRequest.body(new Gson().toJson("Wrong mastery"));
         dat.insertPlane(plane);
         return ok.body(new Gson().toJson("Plane added"));
     }
@@ -79,9 +82,8 @@ public class Controller {
     public ResponseEntity<String> deletePlane(@RequestParam(value = "name") String name){
         if (!dat.exist(name))
             return notFound.body(new Gson().toJson("Cannot find this plane"));
-        if(dat.deletePlane(name))
-            return ok.body(new Gson().toJson("Plane deleted ;("));
-        return badRequest.body(new Gson().toJson(""));
+        dat.deletePlane(name);
+        return ok.body(new Gson().toJson("Plane deleted ;("));
     }
 
 
