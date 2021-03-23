@@ -1,5 +1,6 @@
 package skyrama.database;
 
+import com.google.gson.Gson;
 import skyrama.entity.Plane;
 import skyrama.enumerator.Type;
 import skyrama.util.Util;
@@ -39,6 +40,8 @@ public class Database {
         try (Connection connection = getConnection()) {
             if (connection != null) {
                 PreparedStatement ps = connection.prepareStatement(insertPlane);
+                if (util.getFlightTime(plane.getFlight()) == 0)
+                    return false;
                 ps.setString(1, plane.getName());
                 ps.setString(2, plane.getType().toLowerCase());
                 ps.setBoolean(3, plane.isCargo());
